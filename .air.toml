@@ -1,11 +1,11 @@
 root = "."
 testdata_dir = "testdata"
-tmp_dir = "tmp"
+tmp_dir = "out"
 
 [build]
 args_bin = []
 bin = "./out/main"
-cmd = "go build -o ./out/main -tags=debug ./src"
+cmd = "go build -o ./out/main -tags=debug ."
 delay = 1000
 exclude_dir = ["assets", "out", "vendor", "testdata"]
 exclude_file = []
