@@ -1,4 +1,4 @@
-package api
+package auth
 
 import (
 	"context"
@@ -6,28 +6,31 @@ import (
 	"io"
 	"time"
 
+	"github.com/NikosGour/date_management_API/types"
 	log "github.com/NikosGour/logging/src"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/oauth2"
 )
 
-func authGoogleHandle(c *fiber.Ctx) error {
+type User = types.User
+
+func GoogleHandle(c *fiber.Ctx) error {
 	url := OAuth_config.AuthCodeURL("nikos", oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 	return c.Redirect(url)
 }
-func authRedirectHandle(c *fiber.Ctx) error {
+func RedirectHandle(c *fiber.Ctx) error {
 	code := c.Query("code")
 	if code == "" {
-		return c.Status(fiber.StatusBadRequest).SendString("")
+		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
-	token, err := OAuth_config.Exchange(context.Background(), code) //get token
-	log.Debug("AccessToken=`%v`", token.AccessToken)
-	log.Debug("RefreshToken=`%v`", token.RefreshToken)
-	log.Debug("Expiry=`%v`", token.Expiry)
-	log.Debug("IsValid=`%v`", token.Valid())
-	log.Debug("TokenType=`%v`", token.TokenType)
-	log.Debug("Type=`%v`", token.Type())
+	token, err := OAuth_config.Exchange(context.Background(), code)
+	// log.Debug("AccessToken=`%v`", token.AccessToken)
+	// log.Debug("RefreshToken=`%v`", token.RefreshToken)
+	// log.Debug("Expiry=`%v`", token.Expiry)
+	// log.Debug("IsValid=`%v`", token.Valid())
+	// log.Debug("TokenType=`%v`", token.TokenType)
+	// log.Debug("Type=`%v`", token.Type())
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Failed to exchange token: " + err.Error())
 	}
@@ -52,25 +55,30 @@ func authRedirectHandle(c *fiber.Ctx) error {
 
 func getUserProfile(c *fiber.Ctx, token *oauth2.Token) (User, error) {
 
-	client := OAuth_config.Client(context.Background(), token) //set client for getting user info like email, name, etc.
+	client := OAuth_config.Client(context.Background(), token)
 
-	response, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo") //get user info
+	response, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
 	if err != nil {
 		return User{}, c.Status(fiber.StatusBadRequest).SendString("Failed to get user info: " + err.Error())
 	}
 
 	defer response.Body.Close()
 
-	var user User                           //user variable
-	bytes, err := io.ReadAll(response.Body) //reading response body from client
+	var user User
+	bytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return User{}, c.Status(fiber.StatusBadRequest).SendString("Error reading response body: " + err.Error())
 	}
 
-	err = json.Unmarshal(bytes, &user) //unmarshal user info
+	err = json.Unmarshal(bytes, &user)
 	if err != nil {
 		return User{}, c.Status(fiber.StatusBadRequest).SendString("Error unmarshal json body " + err.Error())
 	}
 
 	return user, nil
+}
+
+func LogoutHandle(c *fiber.Ctx) error {
+	c.ClearCookie("token")
+	return c.Redirect("/")
 }

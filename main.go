@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "github.com/NikosGour/date_management_API/api"
+	api "github.com/NikosGour/date_management_API/app"
 	"github.com/NikosGour/date_management_API/storage"
 	log "github.com/NikosGour/logging/src"
 	"github.com/joho/godotenv"

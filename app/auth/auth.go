@@ -1,4 +1,4 @@
-package api
+package auth
 
 import (
 	"context"
@@ -7,74 +7,15 @@ import (
 	"time"
 
 	log "github.com/NikosGour/logging/src"
-	"golang.org/x/oauth2"
-
-	"github.com/NikosGour/date_management_API/build"
-	"github.com/NikosGour/date_management_API/storage"
-	"github.com/NikosGour/date_management_API/types"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/favicon"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-)
 
-type Storage storage.Storage
-type User types.User
+	"golang.org/x/oauth2"
+)
 
 var (
 	OAuth_config *oauth2.Config
 )
-
-type APIServer struct {
-	storage        Storage
-	listening_addr string
-	env_variables  map[string]string
-}
-
-func NewAPIServer(storage Storage, listening_addr string, oauth_config *oauth2.Config, dotenv map[string]string) *APIServer {
-	OAuth_config = oauth_config
-	this := &APIServer{storage: storage, listening_addr: listening_addr, env_variables: dotenv}
-	return this
-}
-
-func (server *APIServer) Start() {
-
-	log.Debug("DEBUG_MODE = %t\n", build.DEBUG_MODE)
-
-	app := fiber.New()
-
-	app.Use(logger.New(logger.Config{
-		Format: "${time} | ${status} | ${latency} | ${ip} | ${method} | ${path} | Params: ${queryParams} | ReqBody: ${body} | ResBody: ${resBody} | ${error}\n",
-	}))
-
-	app.Use(favicon.New())
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"Nikos": 10})
-	})
-
-	app.Get("/oauth/google", authGoogleHandle)
-
-	//redirect endpoint
-	app.Get("/oauth/redirect", authRedirectHandle)
-
-	with_auth := app.Group("/api", AuthenticateUser)
-
-	with_auth.Get("/logout", func(c *fiber.Ctx) error {
-		c.ClearCookie("token")
-		return c.Redirect("/")
-	})
-
-	with_auth.Get("/testing", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"Skase": 69})
-	})
-
-	err := app.Listen(server.listening_addr)
-	if err != nil {
-		log.Fatal("%s", err)
-	}
-
-}
 
 func AuthenticateUser(c *fiber.Ctx) error {
 	log.Debug("Path: %s", c.Path())
