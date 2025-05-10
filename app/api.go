@@ -2,7 +2,6 @@ package api
 
 import (
 	log "github.com/NikosGour/logging/src"
-	"golang.org/x/oauth2"
 
 	"github.com/NikosGour/date_management_API/app/auth"
 	"github.com/NikosGour/date_management_API/app/handlers"
@@ -24,7 +23,7 @@ type APIServer struct {
 	env_variables  map[string]string
 }
 
-func NewAPIServer(storage Storage, listening_addr string, oauth_config *oauth2.Config, dotenv map[string]string) *APIServer {
+func NewAPIServer(storage Storage, listening_addr string, dotenv map[string]string) *APIServer {
 	this := &APIServer{storage: storage, listening_addr: listening_addr, env_variables: dotenv}
 	return this
 }

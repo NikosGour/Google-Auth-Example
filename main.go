@@ -2,6 +2,7 @@ package main
 
 import (
 	api "github.com/NikosGour/date_management_API/app"
+	"github.com/NikosGour/date_management_API/app/auth"
 	"github.com/NikosGour/date_management_API/storage"
 	log "github.com/NikosGour/logging/src"
 	"github.com/joho/godotenv"
@@ -31,10 +32,12 @@ func main() {
 		Endpoint: google.Endpoint,
 	}
 
+	auth.OAuth_config = oauthConfig
+
 	// Init Server
 	listening_addr := dotenv["HOST_ADDRESS"] + ":" + dotenv["PORT"]
 	log.Debug("%s", listening_addr)
-	api := api.NewAPIServer(mysql_db, listening_addr, oauthConfig, dotenv)
+	api := api.NewAPIServer(mysql_db, listening_addr, dotenv)
 
 	// Run!
 	api.Start()
