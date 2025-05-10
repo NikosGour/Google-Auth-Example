@@ -1,8 +1,8 @@
 package main
 
 import (
-	api "github.com/NikosGour/date_management_API/src"
-	"github.com/NikosGour/date_management_API/src/storage"
+	api "github.com/NikosGour/date_management_API/api"
+	"github.com/NikosGour/date_management_API/storage"
 	log "github.com/NikosGour/logging/src"
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
@@ -13,7 +13,7 @@ func main() {
 	// Init env variables
 	dotenv, err := godotenv.Read(".env")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("%s", err)
 	}
 
 	// Init Database

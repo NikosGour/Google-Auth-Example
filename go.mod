@@ -3,7 +3,7 @@ module github.com/NikosGour/date_management_API
 go 1.23.2
 
 require (
-	github.com/NikosGour/logging v0.1.4
+	github.com/NikosGour/logging v0.1.6
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/joho/godotenv v1.5.1

@@ -24,16 +24,16 @@ func (this *MySQL_Storage) init_database(dbpass string) {
 	var err error
 	this.db, err = sql.Open("mysql", conn_string)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("%s", err)
 	}
 
 	if err = this.db.Ping(); err != nil {
-		log.Fatal(err)
+		log.Fatal("%s", err)
 	}
 
 	err = this.CreateTables()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("%s", err)
 	}
 }
 
