@@ -8,57 +8,9 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
             - MYSQL_DATABASE=${MYSQL_DATABASE}
-        # healthcheck:
-        #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-        #     timeout: 20s
-        #     interval: 20s
-        #     retries: 5
+            - MYSQL_ROOT_HOST=%
         volumes:
             - database_data:/var/lib/mysql
-    # backend:
-    #     image: distributed_systems_backend
-    #     build:
-    #         context: ./backend
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - 7979
-    #     ports:
-    #         - "7979:7979"
-    #     depends_on:
-    #         database:
-    #             condition: service_healthy
-    #     environment:
-    #         - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/${MYSQL_DATABASE}
-    #         - SPRING_DATASOURCE_USERNAME=root
-    #         - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    #     healthcheck:
-    #         test:
-    #             [
-    #                 "CMD",
-    #                 "curl",
-    #                 "-f",
-    #                 "http://localhost:7979/actuator/health",
-    #                 "--header",
-    #                 "'Authorization: Basic cm9vdDpyb290'",
-    #             ]
-    #         timeout: 20s
-    #         interval: 20s
-    #         retries: 5
-    # frontend:
-    #     image: distributed_systems_frontend
-    #     build:
-    #         context: ./frontend
-    #         dockerfile: Dockerfile
-    #     expose:
-    #         - 3000
-    #     ports:
-    #         - "3000:3000"
-    #     environment:
-    #         - REACT_APP_BASE_URL=http://${BASE_URL}:7979
-    #     depends_on:
-    #         backend:
-    #             condition: service_healthy
-
 volumes:
     database_data:
 
