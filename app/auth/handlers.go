@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/NikosGour/date_management_API/types"
+	"github.com/NikosGour/google-oauth-example/types"
 	log "github.com/NikosGour/logging/src"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/oauth2"

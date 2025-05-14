@@ -1,9 +1,9 @@
 package main
 
 import (
-	api "github.com/NikosGour/date_management_API/app"
-	"github.com/NikosGour/date_management_API/app/auth"
-	"github.com/NikosGour/date_management_API/storage"
+	api "github.com/NikosGour/google-oauth-example/app"
+	"github.com/NikosGour/google-oauth-example/app/auth"
+	"github.com/NikosGour/google-oauth-example/storage"
 	log "github.com/NikosGour/logging/src"
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"

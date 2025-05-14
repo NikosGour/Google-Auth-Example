@@ -5,7 +5,7 @@ usage() {
 	exit 1
 }
 
-project_name="date_management_API"
+project_name="google-oauth-example"
 project_dir=$(realpath $(dirname $0))
 out_dir="out"
 out_name="$project_name"

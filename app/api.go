@@ -3,11 +3,11 @@ package api
 import (
 	log "github.com/NikosGour/logging/src"
 
-	"github.com/NikosGour/date_management_API/app/auth"
-	"github.com/NikosGour/date_management_API/app/handlers"
-	"github.com/NikosGour/date_management_API/build"
-	"github.com/NikosGour/date_management_API/storage"
-	"github.com/NikosGour/date_management_API/types"
+	"github.com/NikosGour/google-oauth-example/app/auth"
+	"github.com/NikosGour/google-oauth-example/app/handlers"
+	"github.com/NikosGour/google-oauth-example/build"
+	"github.com/NikosGour/google-oauth-example/storage"
+	"github.com/NikosGour/google-oauth-example/types"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
@@ -32,6 +32,17 @@ func (server *APIServer) Start() {
 
 	log.Debug("DEBUG_MODE = %t\n", build.DEBUG_MODE)
 
+	app := SetupFiberApp()
+
+	err := app.Listen(server.listening_addr)
+	if err != nil {
+		log.Fatal("%s", err)
+	}
+
+}
+
+func SetupFiberApp() *fiber.App {
+
 	app := fiber.New()
 
 	app.Use(logger.New(logger.Config{
@@ -48,9 +59,5 @@ func (server *APIServer) Start() {
 	with_auth.Get("/logout", auth.LogoutHandle)
 	with_auth.Get("/testing", handlers.TestingHandle)
 
-	err := app.Listen(server.listening_addr)
-	if err != nil {
-		log.Fatal("%s", err)
-	}
-
+	return app
 }

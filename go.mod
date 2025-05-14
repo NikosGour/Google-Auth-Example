@@ -1,4 +1,4 @@
-module github.com/NikosGour/date_management_API
+module github.com/NikosGour/google-oauth-example
 
 go 1.23.2
 
