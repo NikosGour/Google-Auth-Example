@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"net/url"
 	"time"
 
 	"github.com/NikosGour/google-oauth-example/types"
@@ -44,7 +45,8 @@ func RedirectHandle(c *fiber.Ctx) error {
 		return err
 	}
 
-	cookie := &fiber.Cookie{Name: "token", Value: string(json_token), HTTPOnly: true, Expires: time.Now().Add(24 * time.Hour)}
+	encoded := url.QueryEscape(string(json_token))
+	cookie := &fiber.Cookie{Name: "token", Value: encoded, HTTPOnly: true, Expires: time.Now().Add(24 * time.Hour)}
 	c.Cookie(cookie)
 	log.Debug("%+v\n", user)
 	return c.Status(fiber.StatusOK).JSON(user)
