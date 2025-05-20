@@ -81,6 +81,7 @@ func getUserProfile(c *fiber.Ctx, token *oauth2.Token) (User, error) {
 }
 
 func LogoutHandle(c *fiber.Ctx) error {
+	// TODO: this doesn't work for some reason
 	c.ClearCookie("token")
 	return c.Redirect("/")
 }
